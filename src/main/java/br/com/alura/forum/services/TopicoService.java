@@ -17,4 +17,8 @@ public class TopicoService {
     public List<Topico> listar() {
         return repository.findAll();
     }
+
+    public List<Topico> listarPorNomeCurso(String nomeDoCurso) {
+        return repository.findByCurso_Nome(nomeDoCurso);
+    }
 }
