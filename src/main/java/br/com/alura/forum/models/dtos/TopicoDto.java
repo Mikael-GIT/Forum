@@ -1,10 +1,10 @@
-package br.com.alura.forum.modelo.dtos;
+package br.com.alura.forum.models.dtos;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import br.com.alura.forum.modelo.Topico;
+import br.com.alura.forum.models.Topico;
 
 public class TopicoDto {
     private Long id;
