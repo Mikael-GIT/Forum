@@ -27,8 +27,9 @@ public class TopicoService {
         return repository.findByCurso_Nome(nomeDoCurso);
     }
 
-    public void salvar(TopicoForm form) {
+    public Topico salvar(TopicoForm form) {
         Topico topico = form.converter(cursoRepository);
         repository.save(topico);
+        return topico;
     }
 }
