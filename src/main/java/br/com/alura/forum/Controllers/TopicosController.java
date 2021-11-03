@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ import br.com.alura.forum.models.Curso;
 import br.com.alura.forum.models.Topico;
 import br.com.alura.forum.models.dtos.DetalhesDoTopicoDto;
 import br.com.alura.forum.models.dtos.TopicoDto;
+import br.com.alura.forum.models.forms.AtualizacaoTopicoForm;
 import br.com.alura.forum.models.forms.TopicoForm;
 import br.com.alura.forum.repositories.TopicoRepository;
 import br.com.alura.forum.services.TopicoService;
@@ -51,5 +53,11 @@ public class TopicosController {
         Topico topico = topicoService.salvar(form);
         URI uri = uriBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
         return ResponseEntity.created(uri).body(new TopicoDto(topico));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TopicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoTopicoForm form) {
+        TopicoDto topicoAtualizado = topicoService.atualizar(id, form);
+        return ResponseEntity.ok(topicoAtualizado);
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import br.com.alura.forum.models.Topico;
 import br.com.alura.forum.models.dtos.DetalhesDoTopicoDto;
 import br.com.alura.forum.models.dtos.TopicoDto;
+import br.com.alura.forum.models.forms.AtualizacaoTopicoForm;
 import br.com.alura.forum.models.forms.TopicoForm;
 import br.com.alura.forum.repositories.CursoRepository;
 import br.com.alura.forum.repositories.TopicoRepository;
@@ -42,5 +43,14 @@ public class TopicoService {
         Topico topico = repository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Id: " + id, null));
         return new DetalhesDoTopicoDto(topico);
+    }
+
+    public TopicoDto atualizar(Long id, AtualizacaoTopicoForm form) {
+        Topico topico = repository.findById(id)
+                .orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado! Id: " + id, null));
+        topico.setTitulo(form.getTitulo());
+        topico.setMensagem(form.getMensagem());
+        repository.save(topico);
+        return new TopicoDto(topico);
     }
 }
