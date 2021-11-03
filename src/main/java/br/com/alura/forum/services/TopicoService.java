@@ -53,4 +53,8 @@ public class TopicoService {
         repository.save(topico);
         return new TopicoDto(topico);
     }
+
+    public void deletar(Long id) {
+        repository.deleteById(id);
+    }
 }
