@@ -10,6 +10,7 @@ import javax.websocket.server.PathParam;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,11 +41,11 @@ public class TopicosController {
 
     @GetMapping
     public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso, @RequestParam int pagina,
-            @RequestParam int qtd) {
+            @RequestParam int qtd, @RequestParam String ordenacao) {
         if (nomeCurso == null) {
-            return topicoService.listar(pagina, qtd);
+            return topicoService.listar(pagina, qtd, ordenacao);
         }
-        return topicoService.listarPorNomeCurso(nomeCurso, pagina, qtd);
+        return topicoService.listarPorNomeCurso(nomeCurso, pagina, qtd, ordenacao);
     }
 
     @GetMapping("/{id}")
