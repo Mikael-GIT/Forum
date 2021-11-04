@@ -9,6 +9,7 @@ import javax.websocket.server.PathParam;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -37,12 +39,12 @@ public class TopicosController {
     private TopicoService topicoService;
 
     @GetMapping
-    public List<TopicoDto> lista(String nomeCurso) {
+    public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso, @RequestParam int pagina,
+            @RequestParam int qtd) {
         if (nomeCurso == null) {
-            List<Topico> topicos = topicoService.listar();
-            return TopicoDto.converter(topicos);
+            return topicoService.listar(pagina, qtd);
         }
-        return TopicoDto.converter(topicoService.listarPorNomeCurso(nomeCurso));
+        return topicoService.listarPorNomeCurso(nomeCurso, pagina, qtd);
     }
 
     @GetMapping("/{id}")

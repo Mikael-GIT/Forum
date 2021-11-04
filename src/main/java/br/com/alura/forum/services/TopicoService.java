@@ -6,6 +6,9 @@ import java.util.Optional;
 
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.alura.forum.models.Topico;
@@ -25,12 +28,16 @@ public class TopicoService {
     @Autowired
     private CursoRepository cursoRepository;
 
-    public List<Topico> listar() {
-        return repository.findAll();
+    public Page<TopicoDto> listar(int pagina, int qtd) {
+        Pageable paginacao = PageRequest.of(pagina, qtd);
+        Page<Topico> topicos = repository.findAll(paginacao);
+        return TopicoDto.converter(topicos);
     }
 
-    public List<Topico> listarPorNomeCurso(String nomeDoCurso) {
-        return repository.findByCurso_Nome(nomeDoCurso);
+    public Page<TopicoDto> listarPorNomeCurso(String nomeDoCurso, int pagina, int qtd) {
+        Pageable paginacao = PageRequest.of(pagina, qtd);
+        Page<Topico> topicos = repository.findByCurso_Nome(nomeDoCurso, paginacao);
+        return TopicoDto.converter(topicos);
     }
 
     public Topico salvar(TopicoForm form) {
