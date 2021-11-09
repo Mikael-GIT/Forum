@@ -9,6 +9,7 @@ import javax.websocket.server.PathParam;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -42,6 +43,7 @@ public class TopicosController {
     private TopicoService topicoService;
 
     @GetMapping
+    @Cacheable(value = "listaDeTopicos") // Funciona como se fosse o id do cache para o spring identificar
     public Page<TopicoDto> lista(@RequestParam(required = false) String nomeCurso,
             @PageableDefault(sort = "id", direction = Direction.DESC) Pageable paginacao) {
         if (nomeCurso == null) {
