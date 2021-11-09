@@ -9,6 +9,7 @@ import javax.websocket.server.PathParam;
 
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,6 +59,8 @@ public class TopicosController {
     }
 
     @PostMapping
+    @CacheEvict(value = "listaDeTopicos", allEntries = true) // Indica para o spring que e para limpar o cache passando
+    // o cache que deseja limpar
     public ResponseEntity<TopicoDto> cadastrar(@RequestBody @Valid TopicoForm form, UriComponentsBuilder uriBuilder) {
         Topico topico = topicoService.salvar(form);
         URI uri = uriBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
@@ -65,12 +68,18 @@ public class TopicosController {
     }
 
     @PutMapping("/{id}")
+    @CacheEvict(value = "listaDeTopicos", allEntries = true)
     public ResponseEntity<TopicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoTopicoForm form) {
         TopicoDto topicoAtualizado = topicoService.atualizar(id, form);
         return ResponseEntity.ok(topicoAtualizado);
     }
 
+    /*
+     * Cache so deve ser utilizado em lugares em que a mudanca de dados nao for
+     * frequente
+     */
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "listaDeTopicos", allEntries = true)
     public ResponseEntity<?> remover(@PathVariable Long id) {
         topicoService.deletar(id);
         return ResponseEntity.ok().build();
