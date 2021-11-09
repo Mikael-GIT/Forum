@@ -76,7 +76,7 @@ public class TopicosController {
 
     /*
      * Cache so deve ser utilizado em lugares em que a mudanca de dados nao for
-     * frequente
+     * frequente  
      */
     @DeleteMapping("/{id}")
     @CacheEvict(value = "listaDeTopicos", allEntries = true)
