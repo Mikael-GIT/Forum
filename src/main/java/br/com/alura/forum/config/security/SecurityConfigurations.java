@@ -1,8 +1,10 @@
-package br.com.alura.forum.security;
+package br.com.alura.forum.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -17,15 +19,21 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    AutenticacaoService autenticacaoService;
+    private AutenticacaoService autenticacaoService;
 
-    // Metodo que configura as autenticacao/controle de acesso
+    @Override
+    @Bean
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
+
+    // Configuracoes de autenticacao
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(autenticacaoService).passwordEncoder(new BCryptPasswordEncoder());
     }
 
-    // Configuracao de autorizacao/quem pode acessar cada url, perfil de acesso
+    // Configuracoes de autorizacao
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/topicos").permitAll()
@@ -34,10 +42,9 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
-    // Configuracoes de recursos estaticos(requisicoes por arquivos javascript, css,
-    // imagens e etc)
+    // Configuracoes de recursos estaticos(js, css, imagens, etc.)
     @Override
     public void configure(WebSecurity web) throws Exception {
-
     }
+
 }
