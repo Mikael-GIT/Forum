@@ -11,13 +11,21 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 
+    private TokenService tokenService; // Não podemos injetar em classes do tipo filter
+
+    public AutenticacaoViaTokenFilter(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         String token = recuperarToken(request);
 
-        System.out.println(token);
+        boolean valido = tokenService.isTokenValido(token);
+
+        System.out.println("Token está valido? " + valido);
 
         filterChain.doFilter(request, response);
 
